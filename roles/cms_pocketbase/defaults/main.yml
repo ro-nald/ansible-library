@@ -1,0 +1,7 @@
+---
+cms_pocketbase_version: "0.22.0"  # Check GitHub for latest
+cms_pocketbase_user: "pocketbase"
+cms_pocketbase_group: "pocketbase"
+cms_pocketbase_bin_path: "/opt/pocketbase"
+cms_pocketbase_data_path: "/opt/pocketbase/pb_data"
+cms_pocketbase_port: "8090"

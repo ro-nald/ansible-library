@@ -1,0 +1,44 @@
+---
+- name: "PRE-CHECK: Verify Architecture"
+  ansible.builtin.set_fact:
+    pb_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+
+- name: Create PocketBase group
+  ansible.builtin.group:
+    name: "{{ pb_group }}"
+    state: present
+
+- name: Create PocketBase user
+  ansible.builtin.user:
+    name: "{{ pb_user }}"
+    group: "{{ pb_group }}"
+    system: true
+    shell: /usr/sbin/nologin
+
+- name: Ensure install directory exists
+  ansible.builtin.file:
+    path: "{{ pb_bin_path }}"
+    state: directory
+    mode: '0755'
+
+- name: Download and Unarchive PocketBase
+  ansible.builtin.unarchive:
+    src: "https://github.com/pocketbase/pocketbase/releases/download/v{{ pb_version }}/pocketbase_{{ pb_version }}_linux_{{ pb_arch }}.zip"
+    dest: "{{ pb_bin_path }}"
+    remote_src: yes
+    creates: "{{ pb_bin_path }}/pocketbase"
+    owner: "{{ pb_user }}"
+    group: "{{ pb_group }}"
+
+- name: Create Systemd service
+  ansible.builtin.template:
+    src: pocketbase.service.j2
+    dest: /etc/systemd/system/pocketbase.service
+    mode: '0644'
+  notify: Reload Systemd
+
+- name: Start PocketBase
+  ansible.builtin.systemd:
+    name: pocketbase
+    state: started
+    enabled: true
