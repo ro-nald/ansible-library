@@ -2,6 +2,8 @@
 # Dependency management (download roles/collections)
 dependency:
   name: galaxy
+driver:
+  name: docker
   options:
     ignore-certs: false
     ignore-errors: false
