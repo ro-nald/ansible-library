@@ -63,7 +63,10 @@ platforms:
   - name: instance
     image: geerlingguy/docker-ubuntu2204-ansible:latest
     privileged: true
-    command: /sbin/init
-    # ADD THIS LINE:
-    groups:
-      - all
+    # This is the magic fix for macOS + Ubuntu 22.04+ images
+    cgroupns_mode: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    # Ensure command is empty to let the image's internal init run
+    command: ""
+    pre_build_image: true
