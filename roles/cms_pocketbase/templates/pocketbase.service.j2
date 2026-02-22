@@ -4,11 +4,11 @@ After=network.target
 
 [Service]
 Type=simple
-User={{ pb_user }}
-Group={{ pb_group }}
-WorkingDirectory={{ pb_bin_path }}
+User={{ cms_pocketbase_user }}
+Group={{ cms_pocketbase_group }}
+WorkingDirectory={{ cms_pocketbase_bin_path }}
 # PocketBase is so light it doesn't need PM2 or Node!
-ExecStart={{ pb_bin_path }}/pocketbase serve --http="0.0.0.0:{{ pb_port }}"
+ExecStart={{ cms_pocketbase_bin_path }}/pocketbase serve --http="0.0.0.0:{{ cms_pocketbase_port }}"
 Restart=always
 RestartSec=5
 

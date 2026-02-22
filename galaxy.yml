@@ -1,0 +1,46 @@
+---
+# The namespace of the collection. This should be your company name.
+# It must be lowercase and only contain alphanumeric characters and underscores.
+namespace: rd
+
+# The name of the collection (matching your repo name but without "ansible-").
+name: library
+
+# The version of the collection. Use Semantic Versioning (SemVer).
+version: 1.0.0
+
+# Path to the README file.
+readme: README.md
+
+# A list of the collection's content authors.
+authors:
+  - Ronald Dadds <daddsronald@gmail.com>
+  - Platform Team
+
+# A short summary description of the collection.
+description: "Internal Golden Path roles for CMS, Database, and OS configuration."
+
+# Licenses must be valid SPDX identifiers (e.g., MIT, Apache-2.0, or Proprietary).
+license:
+  - MIT
+
+# A list of tags to categorize your collection.
+tags:
+  - platform
+  - cms
+  - gold_path
+
+# External collections your collection depends on.
+# For example, if your roles use community modules.
+dependencies:
+  ansible.utils: ">=2.0.0"
+  community.general: ">=8.0.0"
+
+# Files and directories to ignore when building the collection.
+# This keeps your 'test' and '.git' junk out of the final package.
+build_ignore:
+  - "*.tar.gz"
+  - "molecule"
+  - ".gitignore"
+  - ".github"
+  - "tests"

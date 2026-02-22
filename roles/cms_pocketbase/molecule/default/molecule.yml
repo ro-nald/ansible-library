@@ -1,72 +1,29 @@
 ---
-# Dependency management (download roles/collections)
 dependency:
   name: galaxy
 driver:
   name: docker
-  options:
-    ignore-certs: false
-    ignore-errors: false
-    role-file: requirements.yml
-    requirements-file: requirements.yml
-
-
-ansible:
-  cfg:
-    defaults:
-      host_key_checking: false
-      verbosity: 1
-    ssh_connection:
-      pipelining: true
-  env:
-    ANSIBLE_FORCE_COLOR: "1"
-    ANSIBLE_LOAD_CALLBACK_PLUGINS: "1"
-
-  executor:
-    backend: ansible-playbook
-    args:
-      ansible_playbook:
-        - --diff
-        - --force-handlers
-        - --inventory=/path/to/inventory.yml
-      ansible_navigator:
-        - --mode stdout
-        - --pull-policy missing
-        - --execution-environment-image ghcr.io/ansible/community-ansible-dev-tools:latest
-
-  playbooks:
-    create: create.yml
-    converge: converge.yml
-    destroy: destroy.yml
-    cleanup: cleanup.yml
-    prepare: prepare.yml
-    side_effect: side_effect.yml
-    verify: verify.yml
-
-scenario:
-  name: default
-  test_sequence:
-    - dependency
-    - cleanup
-    - destroy
-    - syntax
-    - create
-    - prepare
-    - converge
-    - idempotence
-    - side_effect
-    - verify
-    - cleanup
-    - destroy
-
 platforms:
   - name: instance
     image: geerlingguy/docker-ubuntu2204-ansible:latest
     privileged: true
-    # This is the magic fix for macOS + Ubuntu 22.04+ images
+    published_ports:
+      - 8090:8090/tcp
+    command: /sbin/init
     cgroupns_mode: host
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    # Ensure command is empty to let the image's internal init run
-    command: ""
-    pre_build_image: true
+    groups:
+      - all
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      interpreter_python: auto_silent
+      # Fixes the 'Unreachable' permission error on macOS
+      remote_tmp: /tmp/ansible-remote
+      local_tmp: /tmp/ansible-local
+    ssh_connection:
+      pipelining: True
+verifier:
+  name: ansible

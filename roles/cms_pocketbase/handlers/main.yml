@@ -1,0 +1,9 @@
+---
+- name: Reload Systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart PocketBase
+  ansible.builtin.systemd:
+    name: pocketbase
+    state: restarted
