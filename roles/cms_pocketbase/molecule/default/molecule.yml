@@ -58,3 +58,12 @@ scenario:
     - verify
     - cleanup
     - destroy
+
+platforms:
+  - name: instance
+    image: geerlingguy/docker-ubuntu2204-ansible:latest
+    privileged: true
+    command: /sbin/init
+    # ADD THIS LINE:
+    groups:
+      - all
